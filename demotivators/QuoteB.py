@@ -33,9 +33,9 @@ class QuoteB:
         user_img = Image.new('RGBA', (1000, 550), color='#000000')
 
         drawer = ImageDraw.Draw(user_img)
-        font_1 = ImageFont.truetype("C:/Users/Bogda/AppData/Local/Microsoft/Windows/Fonts/Symbola.ttf", 35, encoding="UFT-8")
-        font_2 = ImageFont.truetype("C:/Users/Bogda/AppData/Local/Microsoft/Windows/Fonts/minecraft.ttf", 35, encoding="UFT-8")
-        font_3 = ImageFont.truetype("C:/Users/Bogda/AppData/Local/Microsoft/Windows/Fonts/minecraft.ttf", 30, encoding="UFT-8")
+        font_1 = ImageFont.truetype("Symbola.ttf", 35, encoding="UFT-8")
+        font_2 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
+        font_3 = ImageFont.truetype("minecraft.ttf", 30, encoding="UFT-8")
 
         size_headline = drawer.textsize(headline_text, font=font_2)
 
