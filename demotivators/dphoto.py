@@ -24,14 +24,14 @@ class dphoto:
         r = random.randint(1, 3)
         print(r)
         if r == 1:
-            fille = ':/photos/dover.jpg'
+            fille = 'photos/dover.jpg'
         elif r == 2:
-            fille = ':/photos/dnezer.jpg'
+            fille = 'photos/dnezer.jpg'
         else:
-            fille = ':/photos/dender.jpg'
+            fille = 'photos/dender.jpg'
         user_img = Image.open(fille)
         drawer = ImageDraw.Draw(user_img)
-        font_1 = ImageFont.truetype("minecraft.ttf", 100, encoding="UFT-8")
+        font_1 = ImageFont.truetype("fonts/minecraft.ttf", 100, encoding="UFT-8")
 
         size = drawer.textsize(f"«Ваш размер: {text[:-1]}»", font=font_1)
         size_a = (1366-size[0])/2

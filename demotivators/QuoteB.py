@@ -31,19 +31,19 @@ class QuoteB:
         user_img = Image.new('RGBA', (1000, 550), color='#000000')
 
         drawer = ImageDraw.Draw(user_img)
-        font_1 = ImageFont.truetype("Symbola.ttf", 35, encoding="UFT-8")
-        font_2 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
-        font_3 = ImageFont.truetype("minecraft.ttf", 30, encoding="UFT-8")
+        font_1 = ImageFont.truetype("fonts/Symbola.ttf", 35, encoding="UFT-8")
+        font_2 = ImageFont.truetype("fonts/minecraft.ttf", 35, encoding="UFT-8")
+        font_3 = ImageFont.truetype("fonts/minecraft.ttf", 30, encoding="UFT-8")
 
         size_headline = drawer.textsize(headline_text, font=font_2)
 
         if ":" in emoji.demojize(text):
             drawer = ImageDraw.Draw(user_img)
-            font_1 = ImageFont.truetype("Symbola.ttf", 35,
+            font_1 = ImageFont.truetype("fonts/Symbola.ttf", 35,
                                         encoding="UFT-8")
-            font_2 = ImageFont.truetype("minecraft.ttf", 35,
+            font_2 = ImageFont.truetype("fonts/minecraft.ttf", 35,
                                         encoding="UFT-8")
-            font_3 = ImageFont.truetype("minecraft.ttf", 30,
+            font_3 = ImageFont.truetype("fonts/minecraft.ttf", 30,
                                         encoding="UFT-8")
             size = drawer.textsize(f"«{text[:-1]}»", font=font_1)
             size_a = (1000-size[0])/2
@@ -54,9 +54,9 @@ class QuoteB:
             drawer.text((500, 470), '#' + x, fill='white', font=font_3)
         else:
             drawer = ImageDraw.Draw(user_img)
-            font_1 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
-            font_2 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
-            font_3 = ImageFont.truetype("minecraft.ttf", 30, encoding="UFT-8")
+            font_1 = ImageFont.truetype("fonts/minecraft.ttf", 35, encoding="UFT-8")
+            font_2 = ImageFont.truetype("fonts/minecraft.ttf", 35, encoding="UFT-8")
+            font_3 = ImageFont.truetype("fonts/minecraft.ttf", 30, encoding="UFT-8")
             size = drawer.textsize(f"«{text[:-1]}»", font=font_1)
             size_a = (1000-size[0])/2
             size_b = ((500-size[1])/2)

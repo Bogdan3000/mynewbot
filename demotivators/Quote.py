@@ -26,11 +26,11 @@ class Quote:
             for i in lines:
                 text = text + i + '\n'
 
-        user_img = Image.open(':/photos/fon.jpg')
+        user_img = Image.open('photos/fon.jpg')
         drawer = ImageDraw.Draw(user_img)
-        font_1 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
-        font_2 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
-        font_3 = ImageFont.truetype("minecraft.ttf", 30, encoding="UFT-8")
+        font_1 = ImageFont.truetype("fonts/minecraft.ttf", 35, encoding="UFT-8")
+        font_2 = ImageFont.truetype("fonts/minecraft.ttf", 35, encoding="UFT-8")
+        font_3 = ImageFont.truetype("fonts/minecraft.ttf", 30, encoding="UFT-8")
 
         size_headline = drawer.textsize(headline_text, font=font_2)
 
