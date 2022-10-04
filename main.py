@@ -832,13 +832,7 @@ async def meme(message: Message):
         photo_upd = await PhotoMessageUploader(user.api).upload(
                 f'photos/memes/{r}.jpg', peer_id=message.peer_id
             )
-    await message.reply(attachment=photo_upd)
-    msg_id = await message.answer('Мемы были взяты автоматически с бесед, бот не имеет отношения к контенту фотографий, все претензии к отправителю команды. Сообщение будет удалено через 30 секунд')
-    await asyncio.sleep(30)
-    await user.api.messages.delete(
-        peer_id=message.peer_id,
-        message_ids=msg_id.message_id,
-        delete_for_all=1)
+    await message.reply(message='https://vk.com/wall599457498_784', attachment=photo_upd)
 
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
