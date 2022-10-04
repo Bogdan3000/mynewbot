@@ -11,10 +11,8 @@ class Quote:
         self._author_name = author_name
 
     def create(self, file, result_filename='qresult.png', use_url=False,
-            headline_text_font='verdana.ttf', headline_text_size=50,
-            headline_text='Цитаты великих людей', author_name_font='ariali.ttf',
-            author_name_size=50, quote_text_font='ariali.ttf', quote_text_size=40) \
-            -> bool:  # Returns True if method executed successfully
+            headline_text='Цитаты великих людей') \
+            -> bool:
 
         text = ''
         lines = textwrap.wrap(self._quote_text, width=40)
@@ -28,7 +26,7 @@ class Quote:
             for i in lines:
                 text = text + i + '\n'
 
-        user_img = Image.open('fon.jpg')
+        user_img = Image.open(':/photos/fon.jpg')
         drawer = ImageDraw.Draw(user_img)
         font_1 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")
         font_2 = ImageFont.truetype("minecraft.ttf", 35, encoding="UFT-8")

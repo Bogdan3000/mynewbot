@@ -24,11 +24,11 @@ class dphoto:
         r = random.randint(1, 3)
         print(r)
         if r == 1:
-            fille = 'dover.jpg'
+            fille = ':/photos/dover.jpg'
         elif r == 2:
-            fille = 'dnezer.jpg'
+            fille = ':/photos/dnezer.jpg'
         else:
-            fille = 'dender.jpg'
+            fille = ':/photos/dender.jpg'
         user_img = Image.open(fille)
         drawer = ImageDraw.Draw(user_img)
         font_1 = ImageFont.truetype("minecraft.ttf", 100, encoding="UFT-8")
