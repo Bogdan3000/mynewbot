@@ -1,5 +1,3 @@
-import time
-import datetime
 from vkbottle.bot import Message
 from vkbottle.user import User
 import vkcoin
@@ -596,7 +594,7 @@ async def quote(message: Message):
             with open('userphoto.jpg', 'wb') as handler:
                 handler.write(img_data)
             dem = Quote(message.reply_message.text, name)
-            dem.create(user_photo, use_url=True, quote_text_size=40)
+            dem.create(user_photo, use_url=True)
             photo_upd = await PhotoMessageUploader(user.api).upload(
                 'qresult.png', peer_id=message.peer_id
             )
@@ -622,7 +620,7 @@ async def quote(message: Message):
             with open('userphoto.jpg', 'wb') as handler:
                 handler.write(img_data)
             dem = QuoteB(message.reply_message.text, name)
-            dem.create(user_photo, use_url=True, quote_text_size=40)
+            dem.create(user_photo, use_url=True)
             photo_upd = await PhotoMessageUploader(user.api).upload(
                 'qresult.png', peer_id=message.peer_id
             )
