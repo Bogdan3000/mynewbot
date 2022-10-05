@@ -181,7 +181,6 @@ async def spam(message: Message, text1, num):
                 peer_id=message.peer_id,
                 message_ids=msg_id.message_id,
                 delete_for_all=1)
-            await message.reply('Выполнено и удалено')
     else:
         msg_id1 = await message.reply("""Ты не достоин""")
         await asyncio.sleep(5)
@@ -909,6 +908,9 @@ async def adminn(message: Message, name):
             else:
                 await message.answer('Не удалось выдать роль участника')
 
+@user.on.chat_message('/добавить')
+async def add(message: Message):
+    await message.reply('Пашол нахуй')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
