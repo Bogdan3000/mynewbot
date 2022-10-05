@@ -12,6 +12,7 @@ import random
 import psycopg2
 import datetime
 import asyncio
+from config import *
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
 
@@ -20,10 +21,9 @@ async def reg(user_id):
     result = db_object.fetchone()
     if not result:
         db_object.execute(
-            "INSERT INTO users(id, santimeters, rules, users_count, name_surname, ban) VALUES (%s, %s, %s, %s, %s, %s)",
-            (user_id, 0, 0, 0, 0, 0))
+            "INSERT INTO users(id, santimeters, rules, users_count, name_surname, admin, ban) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (user_id, 0, 0, 0, 0, 0, 0))
         db_connection.commit()
-
 
 class banan(BaseMiddleware[Message]):
     async def pre(self):
@@ -40,22 +40,6 @@ class banan(BaseMiddleware[Message]):
             if result == 1:
                 self.stop("Пользователь в бане")
 
-
-http = AiohttpClient()
-
-URI = 'postgres://dentsszcjnzjdd:15ea053f4ae0e465f93242d9440a0853c88a099f4ce9f001ce41f7f0005a063c@ec2-54-228-125-183.eu-west-1.compute.amazonaws.com:5432/dd3rqgjsvt6ujn'
-data = requests.get('https://raw.githubusercontent.com/Infqq/auf_gen/main/phrases.txt').text.splitlines()
-data1 = requests.get(
-    'https://raw.githubusercontent.com/Anatoly333/Info_tasks/af9b0fc8819ea70b6f378f59c86e7250cd20df06/Info_Anatoly/datafacts.txt').text.splitlines()
-merchant = vkcoin.VKCoin(user_id=518705815, key='*b;4grVAAdADI9.wQ0!-a77_.EI;pj'
-                                                'n&noFn2ZBdV=!RAuaHxT')
-
-db_connection = psycopg2.connect(URI, sslmode='require')
-db_object = db_connection.cursor()
-user = User(
-    token="vk1.a.RWWsNazD5-_WD0qQz1JWNoGVLUTbIYyubSAF5VA4JNdtVv9Q6LZefNcT-LfVLTTnzNwLeOY_Qi3nvunb-qk4K9e76t3GX0zGqUUgrS0ofMCLwLvg7NUOhZg2JncKg8SlZgddIT6DLaysiIMiZwYxJORto47Ruiz2GaZjsoEAse6C-ebO73Qs3sHoNcBJbiW-")
-
-
 async def captcha_handler(e: CaptchaError) -> str:
     solved = await http.request_json(
         url='https://vk-cptch-solver.herokuapp.com/captcha',
@@ -67,11 +51,9 @@ async def captcha_handler(e: CaptchaError) -> str:
 
     return solved["solve"]
 
-
 async def isk(message):
     if message.from_id == 7296218 or message.from_id == 563739506 or message.from_id == 491848098 or message.from_id == 329152965 or message.from_id == 474978917 or message.from_id == 363852234:
         await asyncio.sleep(0.00000001)
-
 
 @user.on.chat_message(text=['/сколько у <name> <what>?'])
 async def main(message: Message, name, what):
@@ -145,7 +127,6 @@ async def main(message: Message, name, what):
     except 'final':
         await message.reply('Диапазон должен быть указан числом')
 
-
 @user.on.chat_message(text=['/хуй'])
 async def wrappe(message: Message):
     user_id = message.from_id
@@ -166,7 +147,6 @@ async def wrappe(message: Message):
         peer_id=message.peer_id,
         message_ids=msg_id_l.message_id,
         delete_for_all=1)
-
 
 @user.on.chat_message(text=['/хуй-'])
 async def wrappe(message: Message):
@@ -189,7 +169,6 @@ async def wrappe(message: Message):
         message_ids=msg_id_l.message_id,
         delete_for_all=1)
 
-
 @user.on.chat_message(text=['/спам <text1> <num>'])
 async def spam(message: Message, text1, num):
     user_id = message.from_id
@@ -211,7 +190,6 @@ async def spam(message: Message, text1, num):
             message_ids=msg_id1.message_id,
             delete_for_all=1)
         await message.reply('Выполнено и удалено')
-
 
 @user.on.chat_message(text=['/ban <coutry>'])
 async def spam(message: Message, coutry):
@@ -258,7 +236,6 @@ async def spam(message: Message, coutry):
             delete_for_all=1)
         await message.reply('Выполнено и удалено')
 
-
 @user.on.chat_message(text='/статус <stat>')
 async def spam(message: Message, stat):
     user_id = message.from_id
@@ -279,14 +256,12 @@ async def spam(message: Message, stat):
     else:
         await message.reply('У меня нет доступа к твоему аккаунту. Кидай свой токен в лс быстро')
 
-
 @user.on.chat_message(text=['/бал'])
 async def vkc(message: Message):
     user_id = message.from_id
     await reg(user_id)
     bal = str(merchant.get_balance(message.from_id))
     await message.reply(f'Ваш баланс Vk Coin: {bal.partition(":")[2].partition("}")[0]}')
-
 
 @user.on.chat_message(text=['/бал @<name>', '/бал [<name>|<rfc>]'])
 async def vkc(message: Message, name):
@@ -298,7 +273,6 @@ async def vkc(message: Message, name):
     user_name = await user.api.users.get(user_id.object_id)
     await message.reply(
         f'Баланс [id{user_id.object_id}|{user_name[0].first_name}] Vk Coin равен: {bal.partition(":")[2].partition("}")[0]}')
-
 
 @user.on.chat_message(AttachmentTypeRule("photo"))
 async def wrapper(message: Message):
@@ -329,7 +303,6 @@ async def wrapper(message: Message):
             await asyncio.sleep(0.00000001)
     else:
         await asyncio.sleep(0.00000001)
-
 
 @user.on.chat_message(text='/дем<text>')
 async def wrapper(message: Message):
@@ -363,7 +336,6 @@ async def wrapper(message: Message):
     else:
         await asyncio.sleep(0.00000001)
 
-
 @user.on.chat_message(text='/ауф')
 async def wrapper(message: Message):
     user_id = message.from_id
@@ -371,7 +343,6 @@ async def wrapper(message: Message):
     auf = random.choice(data)
     print(auf)
     await message.reply(f'{auf}')
-
 
 @user.on.chat_message(text='/интересный факт')
 async def wrapper(message: Message):
@@ -381,7 +352,6 @@ async def wrapper(message: Message):
     await reg(user_id)
     fact = random.choice(data1)
     await message.reply(f'{fact}')
-
 
 @user.on.chat_message(text='/команды')
 async def wrapper(message: Message):
@@ -528,7 +498,6 @@ async def wrapper(message: Message):
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
 
-
 @user.on.private_message(text='/команды')
 async def wrapper(message: Message):
     user_id = message.from_id
@@ -674,7 +643,6 @@ async def wrapper(message: Message):
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
 
-
 @user.on.chat_message(text='/цитата нью')
 async def quote(message: Message):
     user_id = message.from_id
@@ -699,7 +667,6 @@ async def quote(message: Message):
             await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
     elif message.reply_message is None:
         await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
-
 
 @user.on.chat_message(text='/цитата')
 async def quote(message: Message):
@@ -733,7 +700,6 @@ async def quote(message: Message):
     elif message.reply_message is None:
         await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
 
-
 @user.on.chat_message(text='/чекхуй топ')
 async def dicktop(message: Message):
     user_id = message.from_id
@@ -750,7 +716,6 @@ async def dicktop(message: Message):
             message_id=msg_id.message_id,
             message=f'{reply_message}')
 
-
 @user.on.chat_message(text='/чекхуй')
 async def dickinfo(message: Message):
     user_id = message.from_id
@@ -766,7 +731,6 @@ async def dickinfo(message: Message):
     await message.reply(attachment=photo_upd)
     os.remove('qresult.png')
 
-
 @user.on.chat_message(text=['/чекхуй @<name>', '/чекхуй [<name>|<rfc>'])
 async def dickinfo(message: Message, name):
     user_id = message.from_id
@@ -777,11 +741,12 @@ async def dickinfo(message: Message, name):
     result = db_object.fetchone()
     await message.reply(f'Размер [id{user_id1.object_id}|{users_name1[0].first_name}а] : {result[0]}')
 
-
 @user.on.chat_message(text='/сп <name>')
 async def spam(message: Message, name):
     a = 0
-    if message.from_id == 518705815:
+    db_object.execute(f"SELECT admin FROM users WHERE id = {message.from_id}")
+    result = db_object.fetchone()[0]
+    if result == 1:
         msg_id = await message.reply(f'{name} {a}')
         while True:
             a += 1
@@ -789,12 +754,13 @@ async def spam(message: Message, name):
     else:
         await asyncio.sleep(0.000001)
 
-
 @user.on.chat_message(text=['/бан @<name>', '/бан [<name>|<rfc>]'])
 async def ban(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
-    if message.from_id == 518705815 or message.from_id == 599457498:
+    db_object.execute(f"SELECT admin FROM users WHERE id = {message.from_id}")
+    result = db_object.fetchone()[0]
+    if result == 1:
         user_id = await user.api.utils.resolve_screen_name(name)
         db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
         result = db_object.fetchone()[0]
@@ -815,12 +781,13 @@ async def ban(message: Message, name):
     else:
         await asyncio.sleep(0.0001)
 
-
 @user.on.chat_message(text=['/разбан @<name>', '/разбан [<name>|<rfc>]'], )
 async def ban(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
-    if message.from_id == 518705815 or message.from_id == 599457498:
+    db_object.execute(f"SELECT admin FROM users WHERE id = {message.from_id}")
+    result = db_object.fetchone()[0]
+    if result == 1:
         user_id = await user.api.utils.resolve_screen_name(name)
         db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
         result = db_object.fetchone()[0]
@@ -841,7 +808,6 @@ async def ban(message: Message, name):
     else:
         await asyncio.sleep(0.0001)
 
-
 @user.on.chat_message(text=['/адм команды'])
 async def command(message: Message):
     await message.answer("""Команды администрации:\n\n
@@ -850,7 +816,6 @@ async def command(message: Message):
 3. /статус <args> - Меняет статус в беседе (Например: Пользователь печатает...)\n
 4. /сп <text> - Спамит в беседе <text>'ом\n
 5. /бан <name> & /разбан <name> - Банит/Разбанивает пользователя в боте\n""")
-
 
 @user.on.chat_message(text=['/айди @<name>', '/айди [<name>|<rfc>]'])
 async def abt(message: Message, name):
@@ -881,6 +846,8 @@ async def ping(message: Message):
 
 @user.on.chat_message(text='/мем')
 async def meme(message: Message):
+    user_id = message.from_id
+    await reg(user_id)
     r = random.randint(1, 203)
     if r < 10:
         photo_upd = await PhotoMessageUploader(user.api).upload(
@@ -901,6 +868,47 @@ async def mess(message: Message, text):
     user_id_p = message.from_id
     user_name = await user.api.users.get(user_id_p)
     await user.api.messages.send(user_id='518705815', random_id='0', message=f'[id{user_id_p}|{user_name[0].first_name}] написал(а) сообщение:\n{text}')
+
+@user.on.chat_message(text=['/админ @<name>', '/админ [<name>|<rfc>'])
+async def adminn(message: Message, name):
+    user_id = message.from_id
+    await reg(user_id)
+    if message.from_id == 518705815:
+        user_id = await user.api.utils.resolve_screen_name(name)
+        db_object.execute(f"SELECT admin FROM users WHERE id = {user_id.object_id}")
+        result = db_object.fetchone()[0]
+        if result == 1:
+            await message.answer('Пользователь уже является администратором')
+        else:
+            db_object.execute(f"UPDATE users SET admin = 1 WHERE id = {user_id.object_id}")
+            db_connection.commit()
+            db_object.execute(f"SELECT admin FROM users WHERE id = {user_id.object_id}")
+            result = db_object.fetchone()[0]
+            if result == 1:
+                await message.answer('Пользователю выдана роль администратора')
+            else:
+                await message.answer('Не удалось выдать администратора')
+
+@user.on.chat_message(text=['/админ снять @<name>', '/админ снять [<name>|<rfc>'])
+async def adminn(message: Message, name):
+    user_id = message.from_id
+    await reg(user_id)
+    if message.from_id == 518705815:
+        user_id = await user.api.utils.resolve_screen_name(name)
+        db_object.execute(f"SELECT admin FROM users WHERE id = {user_id.object_id}")
+        result = db_object.fetchone()[0]
+        if result == 0:
+            await message.answer('Пользователь не является администратором')
+        else:
+            db_object.execute(f"UPDATE users SET admin = 0 WHERE id = {user_id.object_id}")
+            db_connection.commit()
+            db_object.execute(f"SELECT admin FROM users WHERE id = {user_id.object_id}")
+            result = db_object.fetchone()[0]
+            if result == 0:
+                await message.answer('Пользователю выдана роль участника')
+            else:
+                await message.answer('Не удалось выдать роль участника')
+
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()

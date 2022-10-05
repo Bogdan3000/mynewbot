@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="PY-222.4167.33">
-    <data-source name="dblhmf5nge58jm@ec2-34-247-72-29.eu-west-1.compute.amazonaws.com" uuid="c49c1917-e519-467f-b0a6-783bd1e436bf">
-      <database-info product="PostgreSQL" version="14.5 (Ubuntu 14.5-1.pgdg20.04+1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.5.0" dbms="POSTGRES" exact-version="14.5" exact-driver-version="42.5">
+    <data-source name="jnsnigkg@lucky.db.elephantsql.com" uuid="c9114d5e-ec20-4ea9-af7d-096d39b48df5">
+      <database-info product="PostgreSQL" version="13.8 (Ubuntu 13.8-1.pgdg20.04+1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.5.0" dbms="POSTGRES" exact-version="13.8" exact-driver-version="42.5">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>eqoedzxyctxrxr</user-name>
+      <user-name>jnsnigkg</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node negative="1">
-            <node kind="database" qname="@">
-              <node kind="schema" qname="@" />
-            </node>
-            <node kind="database" qname="postgres" />
+          <node kind="database" qname="@">
+            <node kind="schema" qname="@" />
           </node>
         </introspection-scope>
       </schema-mapping>
