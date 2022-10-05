@@ -13,6 +13,7 @@ import psycopg2
 import datetime
 import asyncio
 from config import *
+import time
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
 
@@ -275,12 +276,8 @@ async def vkc(message: Message, name):
 
 @user.on.chat_message(AttachmentTypeRule("photo"))
 async def wrapper(message: Message):
-    user_id = message.from_id
-    await reg(user_id)
-    db_object.execute(f'SELECT ban FROM users WHERE id = {message.from_id}')
-    result = db_object.fetchone()[0]
-    print(result)
-    if result == 0:
+        user_id = message.from_id
+        await reg(user_id)
         if message.text != "" and message.text.find('/дем') == 0:
             text = message.text.splitlines()
             photo = message.attachments[0].photo.sizes[-1].url
@@ -300,14 +297,10 @@ async def wrapper(message: Message):
             os.remove('demotivator.jpg')
         else:
             await asyncio.sleep(0.00000001)
-    else:
-        await asyncio.sleep(0.00000001)
 
 @user.on.chat_message(text='/дем<text>')
 async def wrapper(message: Message):
-    if message.text != "" and message.text.find('/дем') == 0:
-        user_id = message.from_id
-        await reg(user_id)
+    if message.reply_message is not None:
         user_id = message.from_id
         await reg(user_id)
         text = message.text.splitlines()
@@ -317,7 +310,12 @@ async def wrapper(message: Message):
             try:
                 photo = message.reply_message.attachments[0].doc.url
             except:
-                await message.answer('Продемотивировать можно только фото, для текста используйте /цитата')
+                if message.reply_message.text != '':
+                    await message.answer('Чтобы продемотивировать текст используйте, /цитата')
+                elif message.reply_message.attachments[0].type.name == 'STICKER':
+                    await message.reply('Пока что не возможно продемотивировать стикер')
+                else:
+                    await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
         p = requests.get(photo)
         out = open(r'demotivator.jpg', "wb")
         out.write(p.content)
@@ -333,7 +331,7 @@ async def wrapper(message: Message):
         os.remove('demresult.jpg')
         os.remove('demotivator.jpg')
     else:
-        await asyncio.sleep(0.00000001)
+        await message.reply('Чтобы создать демотиватор надо отметить сообщение')
 
 @user.on.chat_message(text='/ауф')
 async def wrapper(message: Message):
@@ -420,7 +418,7 @@ async def wrapper(message: Message):
 4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
 5. /ауф - Отправляет случайные ауф фразы.\n
 6. /интересный факт - Отправляет случайный интересный факт.\n
-7. /цитата & /цитата олд - Создаёт цитату.\n\n""")
+7. /цитата & /цитата нью - Создаёт цитату.\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
         peer_id=message.peer_id,
@@ -565,7 +563,7 @@ async def wrapper(message: Message):
 4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
 5. /ауф - Отправляет случайные ауф фразы.\n
 6. /интересный факт - Отправляет случайный интересный факт.\n
-7. /цитата & /цитата нью -Создаёт цитату.\n\n""")
+7. /цитата & /цитата нью - Создаёт цитату.\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
         peer_id=message.peer_id,
@@ -646,6 +644,7 @@ P.S. Бот уже стоит на хосте, но с 28 ноября хост 
 async def quote(message: Message):
     user_id = message.from_id
     await reg(user_id)
+    print(message.reply_message.attachments[0].type.name)
     if message.reply_message is not None:
         if message.reply_message.text != '':
             user_ava = await user.api.users.get(user_ids=message.reply_message.from_id, fields='photo_max')
@@ -662,8 +661,14 @@ async def quote(message: Message):
             await message.reply(attachment=photo_upd)
             os.remove('qresult.png')
             os.remove('userphoto.jpg')
-        elif message.reply_message.text == '':
+            print(message.reply_message.attachments[0].type)
+        elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'PHOTO':
             await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
+            print(message.reply_message.attachments[0].type.STICKER)
+        elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'STICKER':
+            await message.reply('Пока что не возможно процитировать стикер')
+        else:
+            await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
     elif message.reply_message is None:
         await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
 
@@ -694,11 +699,14 @@ async def quote(message: Message):
                 delete_for_all=1)
             os.remove('qresult.png')
             os.remove('userphoto.jpg')
-        elif message.reply_message.text == '':
+        elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'PHOTO':
             await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
+        elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'STICKER':
+            await message.reply('Пока что не возможно процитировать стикер')
+        else:
+            await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
     elif message.reply_message is None:
         await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
-
 @user.on.chat_message(text='/чекхуй топ')
 async def dicktop(message: Message):
     user_id = message.from_id
@@ -761,22 +769,24 @@ async def ban(message: Message, name):
     result = db_object.fetchone()[0]
     if result == 1:
         user_id = await user.api.utils.resolve_screen_name(name)
-        db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
-        result = db_object.fetchone()[0]
-        print(result)
-        if result == 1:
-            await message.answer('Пользователь уже в бане')
-        else:
-            print(user_id.object_id)
-            db_object.execute(f"UPDATE users SET ban = 1 WHERE id = {user_id.object_id}")
-            db_connection.commit()
+        if user_id.object_id is not None:
             db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
-            result = db_object.fetchone()[0]
-            print(result)
-            if result == 1:
-                await message.answer('Пользователь успешно забанен')
+            result123 = db_object.fetchone()[0]
+            if result123 == 1:
+                await message.answer('Пользователь уже в бане')
             else:
-                await message.answer('Не удалось забанить пользователя')
+                print(user_id.object_id)
+                db_object.execute(f"UPDATE users SET ban = 1 WHERE id = {user_id.object_id}")
+                db_connection.commit()
+                db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
+                result = db_object.fetchone()[0]
+                print(result)
+                if result == 1:
+                    await message.answer('Пользователь успешно забанен')
+                else:
+                    await message.answer('Не удалось забанить пользователя')
+        else:
+            await message.reply('Пользователь не в найден в базе')
     else:
         await asyncio.sleep(0.0001)
 
@@ -788,22 +798,26 @@ async def ban(message: Message, name):
     result = db_object.fetchone()[0]
     if result == 1:
         user_id = await user.api.utils.resolve_screen_name(name)
-        db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
-        result = db_object.fetchone()[0]
-        print(result)
-        if result == 0:
-            await message.answer('Пользователь не забанен')
-        else:
-            print(user_id.object_id)
-            db_object.execute(f"UPDATE users SET ban = 0 WHERE id = {user_id.object_id}")
-            db_connection.commit()
+        if user_id.object_id is not None:
+            user_id = await user.api.utils.resolve_screen_name(name)
             db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
             result = db_object.fetchone()[0]
             print(result)
             if result == 0:
-                await message.answer('Пользователь успешно разбанен')
+                await message.answer('Пользователь не забанен')
             else:
-                await message.answer('Не удалось разбанить пользователя')
+                print(user_id.object_id)
+                db_object.execute(f"UPDATE users SET ban = 0 WHERE id = {user_id.object_id}")
+                db_connection.commit()
+                db_object.execute(f'SELECT ban FROM users WHERE id = {user_id.object_id}')
+                result = db_object.fetchone()[0]
+                print(result)
+                if result == 0:
+                    await message.answer('Пользователь успешно забанен')
+                else:
+                    await message.answer('Не удалось забанить пользователя')
+        else:
+            await message.reply('Пользователь не в найден в базе')
     else:
         await asyncio.sleep(0.0001)
 
@@ -825,17 +839,12 @@ async def abt(message: Message, name):
 async def ping(message: Message):
     user_id = message.from_id
     await reg(user_id)
-    start_s = datetime.datetime.now().second
-    start_m = datetime.datetime.now().microsecond
+    start_time = time.time()
     msg_id = await message.answer('Пингую...')
-    end_s = datetime.datetime.now().second
-    end_m = datetime.datetime.now().minute
-    total_ping_s = round(start_s-end_s)
-    total_ping_m = round(start_m-end_m)
     await user.api.messages.edit(
             peer_id=message.peer_id,
             message_id=msg_id.message_id,
-            message=f'Пинг: {total_ping_s},{total_ping_m} секунд'
+            message=f'Пинг: {round(time.time()-start_time, 1)} секунд'
             )
     await asyncio.sleep(10)
     await user.api.messages.delete(
