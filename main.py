@@ -907,10 +907,6 @@ async def adminn(message: Message, name):
                 await message.answer('Пользователю выдана роль участника')
             else:
                 await message.answer('Не удалось выдать роль участника')
-
-@user.on.chat_message('/добавить')
-async def add(message: Message):
-    await message.reply('Пашол нахуй')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
