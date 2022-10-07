@@ -52,10 +52,6 @@ async def captcha_handler(e: CaptchaError) -> str:
 
     return solved["solve"]
 
-async def isk(message):
-    if message.from_id == 7296218 or message.from_id == 563739506 or message.from_id == 491848098 or message.from_id == 329152965 or message.from_id == 474978917 or message.from_id == 363852234:
-        await asyncio.sleep(0.00000001)
-
 @user.on.chat_message(text=['/сколько у <name> <what>?'])
 async def main(message: Message, name, what):
     user_id = message.from_id
@@ -234,7 +230,6 @@ async def spam(message: Message, coutry):
             peer_id=message.peer_id,
             message_ids=msg_id5.message_id,
             delete_for_all=1)
-        await message.reply('Выполнено и удалено')
 
 @user.on.chat_message(text='/статус <stat>')
 async def spam(message: Message, stat):
@@ -261,7 +256,13 @@ async def vkc(message: Message):
     user_id = message.from_id
     await reg(user_id)
     bal = str(merchant.get_balance(message.from_id))
-    await message.reply(f'Ваш баланс Vk Coin: {bal.partition(":")[2].partition("}")[0]}')
+    msg_id = await message.reply(f'Ваш баланс Vk Coin: {bal.partition(":")[2].partition("}")[0]}')
+    await asyncio.sleep(120)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.chat_message(text=['/бал @<name>', '/бал [<name>|<rfc>]'])
 async def vkc(message: Message, name):
@@ -271,8 +272,14 @@ async def vkc(message: Message, name):
     print(user_id)
     bal = str(merchant.get_balance(user_id.object_id))
     user_name = await user.api.users.get(user_id.object_id)
-    await message.reply(
+    msg_id = await message.reply(
         f'Баланс [id{user_id.object_id}|{user_name[0].first_name}] Vk Coin равен: {bal.partition(":")[2].partition("}")[0]}')
+    await asyncio.sleep(120)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.chat_message(AttachmentTypeRule("photo"))
 async def wrapper(message: Message):
@@ -311,11 +318,28 @@ async def wrapper(message: Message):
                 photo = message.reply_message.attachments[0].doc.url
             except:
                 if message.reply_message.text != '':
-                    await message.answer('Чтобы продемотивировать текст используйте, /цитата')
+                    msg_id = await message.answer('Чтобы продемотивировать текст используйте, /цитата')
+                    await asyncio.sleep(60)
+                    await user.api.messages.delete(
+                        peer_id=message.peer_id,
+                        message_ids=msg_id.message_id,
+                        delete_for_all=1)
                 elif message.reply_message.attachments[0].type.name == 'STICKER':
-                    await message.reply('Пока что не возможно продемотивировать стикер')
+                    msg_id = await message.reply('Пока что не возможно продемотивировать стикер')
+                    await asyncio.sleep(60)
+                    await user.api.messages.delete(
+                        peer_id=message.peer_id,
+                        message_ids=msg_id.message_id,
+                        delete_for_all=1)
+
                 else:
-                    await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+                    msg_id = await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+                    await asyncio.sleep(60)
+                    await user.api.messages.delete(
+                        peer_id=message.peer_id,
+                        message_ids=msg_id.message_id,
+                        delete_for_all=1)
+
         p = requests.get(photo)
         out = open(r'demotivator.jpg', "wb")
         out.write(p.content)
@@ -331,7 +355,13 @@ async def wrapper(message: Message):
         os.remove('demresult.jpg')
         os.remove('demotivator.jpg')
     else:
-        await message.reply('Чтобы создать демотиватор надо отметить сообщение')
+        msg_id = await message.reply('Чтобы создать демотиватор надо отметить сообщение')
+        await asyncio.sleep(60)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
+
 
 @user.on.chat_message(text='/ауф')
 async def wrapper(message: Message):
@@ -339,7 +369,13 @@ async def wrapper(message: Message):
     await reg(user_id)
     auf = random.choice(data)
     print(auf)
-    await message.reply(f'{auf}')
+    msg_id = await message.reply(f'{auf}')
+    await asyncio.sleep(180)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.chat_message(text='/интересный факт')
 async def wrapper(message: Message):
@@ -348,7 +384,13 @@ async def wrapper(message: Message):
     user_id = message.from_id
     await reg(user_id)
     fact = random.choice(data1)
-    await message.reply(f'{fact}')
+    msg_id = await message.reply(f'{fact}')
+    await asyncio.sleep(240)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.chat_message(text='/команды')
 async def wrapper(message: Message):
@@ -494,6 +536,12 @@ async def wrapper(message: Message):
 10. /мем - Отправляет случайный мем.\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
+    await asyncio.sleep(180)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.private_message(text='/команды')
 async def wrapper(message: Message):
@@ -639,6 +687,12 @@ async def wrapper(message: Message):
 10. /мем - Отправляет случайный мем.\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
+    await asyncio.sleep(120)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
+
 
 @user.on.chat_message(text='/цитата нью')
 async def quote(message: Message):
@@ -663,14 +717,37 @@ async def quote(message: Message):
             os.remove('userphoto.jpg')
             print(message.reply_message.attachments[0].type)
         elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'PHOTO':
-            await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
-            print(message.reply_message.attachments[0].type.STICKER)
+            msg_id = await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
+
         elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'STICKER':
-            await message.reply('Пока что не возможно процитировать стикер')
+            msg_id = await message.reply('Пока что не возможно процитировать стикер')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
+
         else:
-            await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+            msg_id = await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
+
     elif message.reply_message is None:
-        await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        msg_id = await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        await asyncio.sleep(60)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
+
 
 @user.on.chat_message(text='/цитата')
 async def quote(message: Message):
@@ -700,13 +777,35 @@ async def quote(message: Message):
             os.remove('qresult.png')
             os.remove('userphoto.jpg')
         elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'PHOTO':
-            await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
+            msg_id = await message.reply('Чтобы процитировать фото, надо использовать команду /дем <текст>')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
         elif message.reply_message.text == '' and message.reply_message.attachments[0].type.name == 'STICKER':
-            await message.reply('Пока что не возможно процитировать стикер')
+            msg_id = await message.reply('Пока что не возможно процитировать стикер')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
+
         else:
-            await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+            msg_id = await message.answer('Произошла ошибка, напиши [id518705815|Богдану]')
+            await asyncio.sleep(60)
+            await user.api.messages.delete(
+                peer_id=message.peer_id,
+                message_ids=msg_id.message_id,
+                delete_for_all=1)
+
     elif message.reply_message is None:
-        await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        msg_id = await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        await asyncio.sleep(60)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
 @user.on.chat_message(text='/чекхуй топ')
 async def dicktop(message: Message):
     user_id = message.from_id
@@ -722,6 +821,11 @@ async def dicktop(message: Message):
             peer_id=message.peer_id,
             message_id=msg_id.message_id,
             message=f'{reply_message}')
+        await asyncio.sleep(120)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
 
 @user.on.chat_message(text='/чекхуй')
 async def dickinfo(message: Message):
@@ -735,8 +839,13 @@ async def dickinfo(message: Message):
         'qresult.png', peer_id=message.peer_id
     )
     await asyncio.sleep(0.5)
-    await message.reply(attachment=photo_upd)
+    msg_id = await message.reply(attachment=photo_upd)
     os.remove('qresult.png')
+    await asyncio.sleep(120)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 
 @user.on.chat_message(text=['/чекхуй @<name>', '/чекхуй [<name>|<rfc>'])
 async def dickinfo(message: Message, name):
@@ -746,7 +855,12 @@ async def dickinfo(message: Message, name):
     users_name1 = await user.api.users.get(user_id1.object_id)
     db_object.execute(f'SELECT santimeters FROM users WHERE id = {user_id1.object_id}')
     result = db_object.fetchone()
-    await message.reply(f'Размер [id{user_id1.object_id}|{users_name1[0].first_name}а] : {result[0]}')
+    msg_id = await message.reply(f'Размер [id{user_id1.object_id}|{users_name1[0].first_name}а] : {result[0]}')
+    await asyncio.sleep(60)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 
 @user.on.chat_message(text='/сп <name>')
 async def spam(message: Message, name):
@@ -823,12 +937,17 @@ async def ban(message: Message, name):
 
 @user.on.chat_message(text=['/адм команды'])
 async def command(message: Message):
-    await message.answer("""Команды администрации:\n\n
+    msg_id = await message.answer("""Команды администрации:\n\n
 1. /спам <text> <num> - Невидимо спамит <text>'ом <num> раз\n
 2. /ban <args> - Фейк-бан\n
 3. /статус <args> - Меняет статус в беседе (Например: Пользователь печатает...)\n
 4. /сп <text> - Спамит в беседе <text>'ом\n
 5. /бан <name> & /разбан <name> - Банит/Разбанивает пользователя в боте\n""")
+    await asyncio.sleep(60)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 
 @user.on.chat_message(text=['/айди @<name>', '/айди [<name>|<rfc>]'])
 async def abt(message: Message, name):
@@ -844,7 +963,7 @@ async def ping(message: Message):
     await user.api.messages.edit(
             peer_id=message.peer_id,
             message_id=msg_id.message_id,
-            message=f'Пинг: {round(time.time()-start_time, 1)} секунд'
+            message=f'Понг: {round(time.time()-start_time, 1)} секунд'
             )
     await asyncio.sleep(10)
     await user.api.messages.delete(
@@ -869,7 +988,12 @@ async def meme(message: Message):
         photo_upd = await PhotoMessageUploader(user.api).upload(
                 f'photos/memes/{r}.jpg', peer_id=message.peer_id
             )
-    await message.reply(message='https://vk.com/wall599457498_784', attachment=photo_upd)
+    msg_id = await message.reply(message='https://vk.com/wall599457498_784', attachment=photo_upd)
+    await asyncio.sleep(180)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 
 @user.on.private_message(text='<text>')
 async def mess(message: Message, text):
