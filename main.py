@@ -304,11 +304,6 @@ async def wrapper(message: Message):
                 'demresult.jpg', peer_id=message.peer_id
             )
             msg_id = message.reply(attachment=doc)
-            await asyncio.sleep(960)
-            await user.api.messages.delete(
-                peer_id=message.peer_id,
-                message_ids=msg_id.message_id,
-                delete_for_all=1)
             os.remove('demresult.jpg')
             os.remove('demotivator.jpg')
         else:
@@ -370,11 +365,6 @@ async def wrapper(message: Message):
         os.remove('demotivator.jpg')
     else:
         msg_id = await message.reply('Чтобы создать демотиватор надо отметить сообщение')
-        await asyncio.sleep(60)
-        await user.api.messages.delete(
-            peer_id=message.peer_id,
-            message_ids=msg_id.message_id,
-            delete_for_all=1)
 
 
 @user.on.chat_message(text='/ауф')
@@ -854,11 +844,6 @@ async def dickinfo(message: Message):
     await asyncio.sleep(0.5)
     msg_id = await message.reply(attachment=photo_upd)
     os.remove('qresult.png')
-    await asyncio.sleep(120)
-    await user.api.messages.delete(
-        peer_id=message.peer_id,
-        message_ids=msg_id.message_id,
-        delete_for_all=1)
 
 @user.on.chat_message(text=['/чекхуй @<name>', '/чекхуй [<name>|<rfc>'])
 async def dickinfo(message: Message, name):
