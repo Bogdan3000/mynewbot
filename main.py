@@ -988,7 +988,7 @@ async def ping(message: Message):
 async def meme(message: Message):
     user_id = message.from_id
     await reg(user_id)
-    r = random.randint(1, 203)
+    r = random.randint(1, 316)
     if r < 10:
         photo_upd = await PhotoMessageUploader(user.api).upload(
                 f'photos/memes/00{r}.jpg', peer_id=message.peer_id
