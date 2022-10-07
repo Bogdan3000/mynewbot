@@ -698,7 +698,6 @@ P.S. Бот уже стоит на хосте, но с 28 ноября хост 
 async def quote(message: Message):
     user_id = message.from_id
     await reg(user_id)
-    print(message.reply_message.attachments[0].type.name)
     if message.reply_message is not None:
         if message.reply_message.text != '':
             user_ava = await user.api.users.get(user_ids=message.reply_message.from_id, fields='photo_max')
@@ -747,7 +746,6 @@ async def quote(message: Message):
             peer_id=message.peer_id,
             message_ids=msg_id.message_id,
             delete_for_all=1)
-
 
 @user.on.chat_message(text='/цитата')
 async def quote(message: Message):
@@ -806,6 +804,7 @@ async def quote(message: Message):
             peer_id=message.peer_id,
             message_ids=msg_id.message_id,
             delete_for_all=1)
+
 @user.on.chat_message(text='/чекхуй топ')
 async def dicktop(message: Message):
     user_id = message.from_id
