@@ -356,11 +356,6 @@ async def wrapper(message: Message):
             'demresult.jpg', peer_id=message.peer_id
         )
         msg_id = await message.reply(attachment=doc)
-        await asyncio.sleep(960)
-        await user.api.messages.delete(
-            peer_id=message.peer_id,
-            message_ids=msg_id.message_id,
-            delete_for_all=1)
         os.remove('demresult.jpg')
         os.remove('demotivator.jpg')
     else:
