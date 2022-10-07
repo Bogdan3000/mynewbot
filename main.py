@@ -44,6 +44,13 @@ class banan(BaseMiddleware[Message]):
                 self.stop("Пользователь в бане")
             elif self.event.chat_id == 58:
                 self.stop("Не тот чат")
+    async def post(self):
+        if self.event.text.startswith('/'):
+            db_object.execute(f"UPDATE users SET users_count = users_count + 1 WHERE id = 1")
+            db_connection.commit()
+            if self.handlers:
+                db_object.execute(f"UPDATE users SET users_count = users_count + 1 WHERE id = 2")
+                db_connection.commit()
 
 async def captcha_handler(e: CaptchaError) -> str:
     solved = await http.request_json(
@@ -1034,9 +1041,13 @@ async def adminn(message: Message, name):
             else:
                 await message.answer('Не удалось выдать роль участника')
 
-@user.on.chat_message(text='Нинада')
-async def id(message: Message):
-    print(message.chat_id)
+@user.on.chat_message(text='/статистика')
+async def stats(message: Message):
+    db_object.execute(f'SELECT users_count FROM users WHERE id = 1')
+    result = db_object.fetchone()[0]
+    db_object.execute(f'SELECT users_count FROM users WHERE id = 2')
+    result2 = db_object.fetchone()[0]
+    await message.answer(f'Надйено команд: {result}\nОбработано команд: {result2}\nНе обработано: {result-result2}')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
