@@ -303,7 +303,7 @@ async def wrapper(message: Message):
             doc = await PhotoMessageUploader(user.api).upload(
                 'demresult.jpg', peer_id=message.peer_id
             )
-            msg_id = message.reply(attachment=doc)
+            await message.reply(attachment=doc)
             os.remove('demresult.jpg')
             os.remove('demotivator.jpg')
         else:
