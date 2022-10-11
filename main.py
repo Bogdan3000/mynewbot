@@ -1172,9 +1172,14 @@ async def stickerr(message: Message):
         z = y['all']['styles']['items'][v]['name']
         print(z)
     paid_count = a - free_count1
+    msg_id = await message.reply('Чтобы посмотреть стикеры пользователя: /стики пользователь')
     await message.reply(
         f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
-    await message.reply('Чтобы посмотреть стикеры пользователя: /стики <user>')
+    await asyncio.sleep(5)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
