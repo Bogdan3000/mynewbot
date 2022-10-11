@@ -1107,12 +1107,15 @@ async def stick(message: Message, text):
             except:
                 free_count1 += 1
         for i in range(8):
-            z = y['free'][i]['name']
-            stick_free = f'{z}'
-            reply_message1 += f'{stick_free}, '
-            z = y['paid']['items'][i]['name']
-            stick_paid =f'{z}'
-            reply_message2 += f'{stick_paid}, '
+            try:
+                z = y['free'][i]['name']
+                stick_free = f'{z}'
+                reply_message1 += f'{stick_free}, '
+                z = y['paid']['items'][i]['name']
+                stick_paid =f'{z}'
+                reply_message2 += f'{stick_paid}, '
+            except:
+                continue
         for v in range(b):
             z = y['all']['styles']['items'][v]['name']
             print(z)
@@ -1122,8 +1125,11 @@ async def stick(message: Message, text):
 @user.on.private_message(text='/инвайт <text>')
 async def invite(message: Message, text):
     print(text)
-    invite = await user.api.messages.join_chat_by_invite_link(link=f'{text}')
-    await message.reply(f'Успешно зашёл')
+    try:
+        invite = await user.api.messages.join_chat_by_invite_link(link=f'{text}')
+        await message.reply(f'Успешно зашёл')
+    except:
+        await message.reply('Нету доступа к чату')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
