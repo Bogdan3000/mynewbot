@@ -950,7 +950,13 @@ async def stick(message: Message, text):
             z = y['all']['styles']['items'][v]['name']
             print(z)
         paid_count = a-free_count1
-        await message.reply(f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
+        print(paid_count)
+        if paid_count == 0:
+            await message.reply(
+                f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🥺 Платных стикерпаков у пользователя нет")
+        else:
+            await message.reply(
+                f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
 
 @user.on.private_message(text='/инвайт <text>')
 async def invite(message: Message, text):
@@ -1003,8 +1009,13 @@ async def stickerr(message: Message):
         print(z)
     paid_count = a - free_count1
     msg_id = await message.reply('Чтобы посмотреть стикеры пользователя: /стики пользователь')
-    await message.reply(
-        f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
+    print(paid_count)
+    if paid_count == '0':
+        await message.reply(
+            f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🥺 Платных стикерпаков у пользователя нет")
+    else:
+        await message.reply(
+            f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
     await asyncio.sleep(5)
     await user.api.messages.delete(
         peer_id=message.peer_id,
