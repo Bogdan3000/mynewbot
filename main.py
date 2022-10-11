@@ -1130,6 +1130,51 @@ async def invite(message: Message, text):
         await message.reply(f'Успешно зашёл')
     except:
         await message.reply('Нету доступа к чату')
+
+@user.on.chat_message(text='/стики')
+async def stickerr(message: Message):
+    user_id = message.from_id
+    name = await user.api.users.get(user_id)
+    data2 = f'https://stickers.loupg.one/user/{user_id}'
+    params = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.117',
+        'vk-auth': 'vk_access_token_settings=&vk_app_id=7475013&vk_are_notifications_enabled=0&vk_is_app_user=0&vk_is_favorite=0&vk_language=ru&vk_platform=desktop_web&vk_ref=group_menu&vk_ts=1665487420&vk_user_id=518705815&sign=W-A4TrGVXtSNEtMpW5SSPmKBUipEHPmHCJhGCPxW_38'
+    }
+    y = json.loads(requests.get(data2, headers=params).text)
+    a = str(y['all']['items']).count('name')
+    b = str(y['all']['styles']).count('name')
+    print(f'Всего стикеров и стилей: {a + b}')
+    free_count = 0
+    free_count1 = 0
+    reply_message1 = ''
+    reply_message2 = ''
+    price = 0
+    for i in range(a):
+        try:
+            x = str(y['all']['items'][i]['price'])
+            if x == '0':
+                free_count1 += 1
+            else:
+                price += y['all']['items'][i]['price']
+        except:
+            free_count1 += 1
+    for i in range(8):
+        try:
+            z = y['free'][i]['name']
+            stick_free = f'{z}'
+            reply_message1 += f'{stick_free}, '
+            z = y['paid']['items'][i]['name']
+            stick_paid = f'{z}'
+            reply_message2 += f'{stick_paid}, '
+        except:
+            continue
+    for v in range(b):
+        z = y['all']['styles']['items'][v]['name']
+        print(z)
+    paid_count = a - free_count1
+    await message.reply(
+        f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
+    await message.reply('Чтобы посмотреть стикеры пользователя: /стики <user>')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
