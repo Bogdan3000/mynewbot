@@ -1,22 +1,19 @@
 from vkbottle.bot import Message
-from vkbottle.user import User
-import vkcoin
 import os
 from vkbottle.dispatch.rules.base import *
 from vkbottle.tools import *
-from vkbottle import CaptchaError, BaseMiddleware, BaseStateGroup
-from vkbottle.http import AiohttpClient
+from vkbottle import CaptchaError, BaseMiddleware
+
+import config
 from demotivators import Demotivator, Quote, QuoteB, dphoto
-import requests
 import random
-import psycopg2
 import datetime
 import asyncio
 from config import *
 import time
+import json
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
-
 async def reg(user_id):
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()
@@ -48,9 +45,9 @@ class banan(BaseMiddleware[Message]):
         if self.event.text.startswith('/'):
             db_object.execute(f"UPDATE users SET users_count = users_count + 1 WHERE id = 1")
             db_connection.commit()
-            if self.handlers:
-                db_object.execute(f"UPDATE users SET users_count = users_count + 1 WHERE id = 2")
-                db_connection.commit()
+        elif self.handlers:
+            db_object.execute(f"UPDATE users SET users_count = users_count + 1 WHERE id = 2")
+            db_connection.commit()
 
 async def captcha_handler(e: CaptchaError) -> str:
     solved = await http.request_json(
@@ -513,7 +510,23 @@ async def wrapper(message: Message):
     await user.api.messages.edit(
         peer_id=message.peer_id,
         message_id=msg_id.message_id,
-        message=f"""На данный момент существуют 10 команд:\n\n
+        message=f"""На данный момент существуют 11 команд:\n\n
+1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
+2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
+3. /бал & /бал <user> - показывает либо ваш либо баланс пользователя VkCoin'ов.\n
+4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
+5. /ауф - Отправляет случайные ауф фразы.\n
+6. /интересный факт - Отправляет случайный интересный факт.\n
+7. /цитата & /цитата нью - Создаёт цитату.\n
+8. /чекхуй & /чекхуй <user> - показывает либо ваш либо размер пользователя.\n
+9. /чекхуй топ -показывает топ 10 по размерам.\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user>- Показывает стикерпаки пользователя.\n\n""")
+    await asyncio.sleep(1)
+    await user.api.messages.edit(
+        peer_id=message.peer_id,
+        message_id=msg_id.message_id,
+        message=f"""На данный момент существуют 11 команд:\n\n
 1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
 2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
 3. /бал & /бал <user> - показывает либо ваш либо баланс пользователя VkCoin'ов.\n
@@ -523,13 +536,14 @@ async def wrapper(message: Message):
 7. /цитата & /цитата нью - Создаёт цитату.\n
 8. /чекхуй & /чекхуй <user> - показывает либо ваш либо размер пользователя.\n
 9. /чекхуй топ - показывает топ 10 по размерам.\n
-10. /мем - Отправляет случайный мем.\n\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user>- Показывает стикерпаки пользователя.\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
         peer_id=message.peer_id,
         message_id=msg_id.message_id,
-        message=f"""На данный момент существуют 10 команд:\n\n
+        message=f"""На данный момент существуют 11 команд:\n\n
 1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
 2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
 3. /бал & /бал <user> - показывает либо ваш либо баланс пользователя VkCoin'ов.\n
@@ -539,7 +553,8 @@ async def wrapper(message: Message):
 7. /цитата & /цитата нью - Создаёт цитату.\n
 8. /чекхуй & /чекхуй <user> - показывает либо ваш либо размер пользователя.\n
 9. /чекхуй топ - показывает топ 10 по размерам.\n
-10. /мем - Отправляет случайный мем.\n\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user>- Показывает стикерпаки пользователя.\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
     await asyncio.sleep(180)
@@ -674,7 +689,26 @@ async def wrapper(message: Message):
 7. /цитата & /цитата нью -Создаёт цитату.\n
 8. /чекхуй & /чекхуй <user> -показывает либо ваш либо размер пользователя.\n
 9. /чекхуй топ -показывает топ 10 по размерам.\n
-10. /мем - Отправляет случайный мем.\n\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user> - Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n""")
+    await asyncio.sleep(1)
+    await user.api.messages.edit(
+        peer_id=message.peer_id,
+        message_id=msg_id.message_id,
+        message=f"""На данный момент существуют 10 команд:\n\n
+1. /Сколько у <name> <args>? -Рандомно выдает <args> от 40 до 50\n
+2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
+3. /бал & /бал <user> -показывает либо ваш либо баланс пользователя VkCoin'ов.\n
+4. /дем -Создаёт демотиватор с вашим фото и текстом.\n
+5. /ауф -Отправляет случайные ауф фразы.\n
+6. /интересный факт -Отправляет случайный интересный факт.\n
+7. /цитата & /цитата нью -Создаёт цитату.\n
+8. /чекхуй & /чекхуй <user> -показывает либо ваш либо размер пользователя.\n
+9. /чекхуй топ -показывает топ 10 по размерам.\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user>- Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
@@ -690,7 +724,9 @@ async def wrapper(message: Message):
 7. /цитата & /цитата нью -Создаёт цитату.\n
 8. /чекхуй & /чекхуй <user> -показывает либо ваш либо размер пользователя.\n
 9. /чекхуй топ -показывает топ 10 по размерам.\n
-10. /мем - Отправляет случайный мем.\n\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user>- Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n
 P.S. Бот уже стоит на хосте, но с 28 ноября хост будит стоит денег, так что скидуемся ему [id518705815|Богдан], иначе всем бан(""")
     await asyncio.sleep(120)
@@ -698,7 +734,6 @@ P.S. Бот уже стоит на хосте, но с 28 ноября хост 
         peer_id=message.peer_id,
         message_ids=msg_id.message_id,
         delete_for_all=1)
-
 
 @user.on.chat_message(text='/цитата нью')
 async def quote(message: Message):
@@ -995,12 +1030,6 @@ async def meme(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.private_message(text='<text>')
-async def mess(message: Message, text):
-    user_id_p = message.from_id
-    user_name = await user.api.users.get(user_id_p)
-    await user.api.messages.send(user_id='518705815', random_id='0', message=f'[id{user_id_p}|{user_name[0].first_name}] написал(а) сообщение:\n{text}')
-
 @user.on.chat_message(text=['/админ @<name>', '/админ [<name>|<rfc>'])
 async def adminn(message: Message, name):
     user_id = message.from_id
@@ -1048,6 +1077,53 @@ async def stats(message: Message):
     db_object.execute(f'SELECT users_count FROM users WHERE id = 2')
     result2 = db_object.fetchone()[0]
     await message.answer(f'Надйено команд: {result}\nОбработано команд: {result2}\nНе обработано: {result-result2}')
+
+@user.on.chat_message(text=['/стики @<text>', '/стики [<text>|<rfc>'])
+async def stick(message: Message, text):
+        user_id1 = await user.api.utils.resolve_screen_name(text)
+        user_id = user_id1.object_id
+        name = await user.api.users.get(user_id)
+        data2 = f'https://stickers.loupg.one/user/{user_id}'
+        params = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.117',
+            'vk-auth': 'vk_access_token_settings=&vk_app_id=7475013&vk_are_notifications_enabled=0&vk_is_app_user=0&vk_is_favorite=0&vk_language=ru&vk_platform=desktop_web&vk_ref=group_menu&vk_ts=1665487420&vk_user_id=518705815&sign=W-A4TrGVXtSNEtMpW5SSPmKBUipEHPmHCJhGCPxW_38'
+        }
+        y = json.loads(requests.get(data2, headers=params).text)
+        a = str(y['all']['items']).count('name')
+        b = str(y['all']['styles']).count('name')
+        print(f'Всего стикеров и стилей: {a + b}')
+        free_count = 0
+        free_count1 = 0
+        reply_message1 = ''
+        reply_message2 = ''
+        price = 0
+        for i in range(a):
+            try:
+                x = str(y['all']['items'][i]['price'])
+                if x == '0':
+                    free_count1 += 1
+                else:
+                    price += y['all']['items'][i]['price']
+            except:
+                free_count1 += 1
+        for i in range(8):
+            z = y['free'][i]['name']
+            stick_free = f'{z}'
+            reply_message1 += f'{stick_free}, '
+            z = y['paid']['items'][i]['name']
+            stick_paid =f'{z}'
+            reply_message2 += f'{stick_paid}, '
+        for v in range(b):
+            z = y['all']['styles']['items'][v]['name']
+            print(z)
+        paid_count = a-free_count1
+        await message.reply(f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
+
+@user.on.private_message(text='/инвайт <text>')
+async def invite(message: Message, text):
+    print(text)
+    invite = await user.api.messages.join_chat_by_invite_link(link=f'{text}')
+    await message.reply(f'Успешно зашёл')
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()

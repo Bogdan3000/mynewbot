@@ -12,3 +12,15 @@ merchant = vkcoin.VKCoin(user_id=518705815, key='*b;4grVAAdADI9.wQ0!-a77_.EI;pj'
 db_connection = psycopg2.connect(URI, sslmode='require')
 db_object = db_connection.cursor()
 user = User(token="vk1.a.RWWsNazD5-_WD0qQz1JWNoGVLUTbIYyubSAF5VA4JNdtVv9Q6LZefNcT-LfVLTTnzNwLeOY_Qi3nvunb-qk4K9e76t3GX0zGqUUgrS0ofMCLwLvg7NUOhZg2JncKg8SlZgddIT6DLaysiIMiZwYxJORto47Ruiz2GaZjsoEAse6C-ebO73Qs3sHoNcBJbiW-")
+
+def pluralForm(amount, variants):
+    amount = abs(amount)
+
+    if amount % 10 == 1 and amount % 100 != 11:
+        variant = 0
+    elif 2 <= amount % 10 <= 4 and (amount % 100 < 10 or amount % 100 >= 20):
+        variant = 1
+    else:
+        variant = 2
+
+    return f"{amount} {variants[variant]}"
