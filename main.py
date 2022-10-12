@@ -837,7 +837,7 @@ async def ban(message: Message, name):
                 result = db_object.fetchone()[0]
                 print(result)
                 if result == 0:
-                    await message.answer('Пользователь успешно разабанен')
+                    await message.answer('Пользователь успешно разбанен')
                 else:
                     await message.answer('Не удалось забанить пользователя')
         else:
