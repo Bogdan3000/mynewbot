@@ -59,7 +59,6 @@ pydantic==1.10.2
 pygame==2.1.2
 Pygments==2.13.0
 pyparsing==3.0.9
-pypiwin32==223
 PySocks==1.7.1
 PySoundFile==0.9.0.post1
 python-dateutil==2.8.2
