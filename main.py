@@ -12,8 +12,20 @@ from config import *
 import time
 import json
 from gtts import gTTS
+import os
+import torch
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
+device = torch.device('cpu')
+torch.set_num_threads(4)
+local_file = 'model.pt'
+
+if not os.path.isfile(local_file):
+    torch.hub.download_url_to_file('https://models.silero.ai/models/tts/ru/v3_1_ru.pt',
+                                   local_file)
+
+model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
+model.to(device)
 async def reg(user_id):
     db_object.execute(f"SELECT id FROM users WHERE id = {user_id}")
     result = db_object.fetchone()
@@ -854,8 +866,6 @@ async def abt(message: Message, name):
 
 @user.on.chat_message(text='/пинг')
 async def ping(message: Message):
-    user_id = message.from_id
-    await reg(user_id)
     start_time = time.time()
     msg_id = await message.answer('Пингую...')
     await user.api.messages.edit(
@@ -1057,11 +1067,17 @@ async def stickerr(message: Message):
 
 @user.on.chat_message(text='/озвучить <text>')
 async def audio(message: Message, text):
-    s = gTTS(text=f'{text}', lang='ru').save('sample.mp3')
+    example_text = f'{text}'
+    sample_rate = 48000
+    speaker = 'baya'
+    audio_paths = model.save_wav(text=example_text,
+                                 speaker=speaker,
+                                 sample_rate=sample_rate)
     audio_upd = await VoiceMessageUploader(user.api).upload(
-        f'sample.mp3', file_source=f'sample.mp3', peer_id=message.peer_id
+        f'test.wav', file_source=f'test.wav', peer_id=message.peer_id
     )
     await message.reply(attachment=audio_upd)
+    os.remove('test.wav')
 
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
