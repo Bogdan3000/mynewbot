@@ -3,7 +3,6 @@ import os
 from vkbottle.dispatch.rules.base import *
 from vkbottle.tools import *
 from vkbottle import CaptchaError, BaseMiddleware
-
 import config
 from demotivators import Demotivator, Quote, QuoteB, dphoto
 import random
@@ -12,6 +11,9 @@ import asyncio
 from config import *
 import time
 import json
+import VoiceHelper
+from gtts import gTTS
+import pyttsx3
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
 async def reg(user_id):
@@ -527,6 +529,24 @@ async def wrapper(message: Message):
         peer_id=message.peer_id,
         message_id=msg_id.message_id,
         message=f"""На данный момент существуют 10 команд:\n\n
+1. /Сколько у <name> <args>? -Рандомно выдает <args> от 40 до 50\n
+2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
+3. /бал & /бал <user> - показывает либо ваш либо баланс пользователя VkCoin'ов.\n
+4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
+5. /ауф - Отправляет случайные ауф фразы.\n
+6. /интересный факт - Отправляет случайный интересный факт.\n
+7. /цитата & /цитата нью - Создаёт цитату.\n
+8. /чекхуй & /чекхуй <user> - Показывает либо ваш либо размер пользователя.\n
+9. /чекхуй топ - показывает топ 10 по размерам.\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user> - Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n
+13. /озвучить <text> - Озвучивает ваш текст""")
+    await asyncio.sleep(1)
+    await user.api.messages.edit(
+        peer_id=message.peer_id,
+        message_id=msg_id.message_id,
+        message=f"""На данный момент существуют 10 команд:\n\n
 1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
 2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
 3. /бал & /бал <user> - Показывает либо ваш либо баланс пользователя VkCoin'ов.\n
@@ -685,17 +705,18 @@ async def dicktop(message: Message):
     reply_message = "Топ по размерам:\n"
     msg_id = await message.answer(reply_message)
     for i, item in enumerate(result):
+        print(item[0])
         users_name = await user.api.users.get(item[0])
         reply_message += f'{i + 1}.  [id{item[0]}|{users_name[0].first_name}] - {item[1]} см.\n'
         await user.api.messages.edit(
             peer_id=message.peer_id,
             message_id=msg_id.message_id,
             message=f'{reply_message}')
-        await asyncio.sleep(120)
-        await user.api.messages.delete(
-            peer_id=message.peer_id,
-            message_ids=msg_id.message_id,
-            delete_for_all=1)
+    await asyncio.sleep(120)
+    await user.api.messages.delete(
+        peer_id=message.peer_id,
+        message_ids=msg_id.message_id,
+        delete_for_all=1)
 
 @user.on.chat_message(text='/чекхуй')
 async def dickinfo(message: Message):
@@ -1021,6 +1042,14 @@ async def stickerr(message: Message):
         peer_id=message.peer_id,
         message_ids=msg_id.message_id,
         delete_for_all=1)
+
+@user.on.chat_message(text='/озвучить <text>')
+async def audio(message: Message, text):
+    s = gTTS(text=f'{text}', lang='ru').save('sample.mp3')
+    audio_upd = await VoiceMessageUploader(user.api).upload(
+        f'sample.mp3', file_source=f'sample.mp3', peer_id=message.peer_id
+    )
+    await message.reply(attachment=audio_upd)
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
