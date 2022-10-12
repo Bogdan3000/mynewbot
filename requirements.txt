@@ -104,3 +104,4 @@ wget==3.2
 win32-setctime==1.1.0
 wsproto==1.2.0
 yarl==1.8.1
+PyAudio==0.2.12
