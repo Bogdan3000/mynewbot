@@ -836,7 +836,7 @@ async def ban(message: Message, name):
                 result = db_object.fetchone()[0]
                 print(result)
                 if result == 0:
-                    await message.answer('Пользователь успешно забанен')
+                    await message.answer('Пользователь успешно разабанен')
                 else:
                     await message.answer('Не удалось забанить пользователя')
         else:
@@ -1077,6 +1077,32 @@ async def audio(message: Message, text):
     )
     await message.reply(attachment=audio_upd)
     os.remove('test.wav')
+
+@user.on.chat_message(text='/озвучить'.lower())
+async def audio(message: Message):
+    if message.reply_message is not None:
+        if message.reply_message.text != '':
+            text = message.reply_message.text
+            example_text = f'{text}'
+            sample_rate = 48000
+            speaker = 'baya'
+            audio_paths = model.save_wav(text=example_text,
+                                         speaker=speaker,
+                                         sample_rate=sample_rate)
+            audio_upd = await VoiceMessageUploader(user.api).upload(
+                f'test.wav', file_source=f'test.wav', peer_id=message.peer_id
+            )
+            await message.reply(attachment=audio_upd)
+            os.remove('test.wav')
+        elif message.reply_message.text == '':
+            await message.reply('В сообщении должен быть текст')
+    elif message.reply_message is None:
+        msg_id = await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        await asyncio.sleep(60)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
 
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
