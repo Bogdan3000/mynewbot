@@ -13,6 +13,7 @@ import time
 import json
 import os
 import torch
+from gtts import gTTS
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
 device = torch.device('cpu')
@@ -1064,7 +1065,7 @@ async def stickerr(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/озвучить <text>'.lower())
+@user.on.chat_message(text='/озвучить нью <text>'.lower())
 async def audio(message: Message, text):
     example_text = f'{text}'
     sample_rate = 48000
@@ -1078,7 +1079,7 @@ async def audio(message: Message, text):
     await message.reply(attachment=audio_upd)
     os.remove('test.wav')
 
-@user.on.chat_message(text='/озвучить'.lower())
+@user.on.chat_message(text='/озвучить нью'.lower())
 async def audio(message: Message):
     if message.reply_message is not None:
         if message.reply_message.text != '':
@@ -1097,7 +1098,35 @@ async def audio(message: Message):
         elif message.reply_message.text == '':
             await message.reply('В сообщении должен быть текст')
     elif message.reply_message is None:
-        msg_id = await message.reply('Чтобы процитировать сообщение,ты должен на него ответить')
+        msg_id = await message.reply('Чтобы произнести сообщение,ты должен на него ответить')
+        await asyncio.sleep(60)
+        await user.api.messages.delete(
+            peer_id=message.peer_id,
+            message_ids=msg_id.message_id,
+            delete_for_all=1)
+
+@user.on.chat_message(text='/озвучить <text>')
+async def audio(message: Message, text):
+    s = gTTS(text=f'{text}', lang='ru').save('sample.mp3')
+    audio_upd = await VoiceMessageUploader(user.api).upload(
+            f'sample.mp3', file_source=f'sample.mp3', peer_id=message.peer_id
+        )
+    await message.reply(attachment=audio_upd)
+
+@user.on.chat_message(text='/озвучить'.lower())
+async def audio(message: Message):
+    if message.reply_message is not None:
+        if message.reply_message.text != '':
+            text = message.reply_message.text
+            s = gTTS(text=f'{text}', lang='ru').save('sample.mp3')
+            audio_upd = await VoiceMessageUploader(user.api).upload(
+                f'sample.mp3', file_source=f'sample.mp3', peer_id=message.peer_id
+            )
+            await message.reply(attachment=audio_upd)
+        elif message.reply_message.text == '':
+            await message.reply('В сообщении должен быть текст')
+    elif message.reply_message is None:
+        msg_id = await message.reply('Чтобы произнести сообщение,ты должен на него ответить')
         await asyncio.sleep(60)
         await user.api.messages.delete(
             peer_id=message.peer_id,
