@@ -11,9 +11,7 @@ import asyncio
 from config import *
 import time
 import json
-import VoiceHelper
 from gtts import gTTS
-import pyttsx3
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
 print(x)
 async def reg(user_id):
@@ -273,7 +271,6 @@ async def vkc(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-
 @user.on.chat_message(text=['/бал @<name>', '/бал [<name>|<rfc>]'])
 async def vkc(message: Message, name):
     user_id = message.from_id
@@ -289,7 +286,6 @@ async def vkc(message: Message, name):
         peer_id=message.peer_id,
         message_ids=msg_id.message_id,
         delete_for_all=1)
-
 
 @user.on.chat_message(AttachmentTypeRule("photo"))
 async def wrapper(message: Message):
@@ -367,7 +363,6 @@ async def wrapper(message: Message):
     else:
         msg_id = await message.reply('Чтобы создать демотиватор надо отметить сообщение')
 
-
 @user.on.chat_message(text='/ауф')
 async def wrapper(message: Message):
     user_id = message.from_id
@@ -380,7 +375,6 @@ async def wrapper(message: Message):
         peer_id=message.peer_id,
         message_ids=msg_id.message_id,
         delete_for_all=1)
-
 
 @user.on.chat_message(text='/интересный факт')
 async def wrapper(message: Message):
@@ -522,8 +516,7 @@ async def wrapper(message: Message):
 8. /чекхуй & /чекхуй <user> - Показывает либо ваш либо размер пользователя.\n
 9. /чекхуй топ - показывает топ 10 по размерам.\n
 10. /мем - Отправляет случайный мем.\n
-11. /стики <user> - Показывает стикерпаки пользователя.\n
-12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n""")
+11. /стики <user> - Показывает стикерпаки пользователя.\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
         peer_id=message.peer_id,
@@ -540,8 +533,7 @@ async def wrapper(message: Message):
 9. /чекхуй топ - показывает топ 10 по размерам.\n
 10. /мем - Отправляет случайный мем.\n
 11. /стики <user> - Показывает стикерпаки пользователя.\n
-12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n
-13. /озвучить <text> - Озвучивает ваш текст""")
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
         peer_id=message.peer_id,
@@ -558,7 +550,43 @@ async def wrapper(message: Message):
 9. /чекхуй топ - показывает топ 10 по размерам.\n
 10. /мем - Отправляет случайный мем.\n
 11. /стики <user> - Показывает стикерпаки пользователя.\n
-12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n\n""")
+    await asyncio.sleep(1)
+    await user.api.messages.edit(
+        peer_id=message.peer_id,
+        message_id=msg_id.message_id,
+        message=f"""На данный момент существуют 10 команд:\n\n
+1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
+2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
+3. /бал & /бал <user> - Показывает либо ваш либо баланс пользователя VkCoin'ов.\n
+4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
+5. /ауф - Отправляет случайные ауф фразы.\n
+6. /интересный факт - Отправляет случайный интересный факт.\n
+7. /цитата & /цитата нью - Создаёт цитату.\n
+8. /чекхуй & /чекхуй <user> - показывает либо ваш либо размер пользователя.\n
+9. /чекхуй топ - показывает топ 10 по размерам.\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user> - Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n
+13. /озвучить <text> - Озвучивает ваш текст\n\n""")
+    await asyncio.sleep(1)
+    await user.api.messages.edit(
+    peer_id = message.peer_id,
+              message_id = msg_id.message_id,
+                           message = f"""На данный момент существуют 10 команд:\n\n
+1. /Сколько у <name> <args>? - Рандомно выдает <args> от 40 до 50\n
+2. /хуй & /хуй- - Увеличивает/Уменьшает размер вашего...\n
+3. /бал & /бал <user> - Показывает либо ваш либо баланс пользователя VkCoin'ов.\n
+4. /дем - Создаёт демотиватор с вашим фото и текстом.\n
+5. /ауф - Отправляет случайные ауф фразы.\n
+6. /интересный факт - Отправляет случайный интересный факт.\n
+7. /цитата & /цитата нью - Создаёт цитату.\n
+8. /чекхуй & /чекхуй <user> - показывает либо ваш либо размер пользователя.\n
+9. /чекхуй топ - показывает топ 10 по размерам.\n
+10. /мем - Отправляет случайный мем.\n
+11. /стики <user> - Показывает стикерпаки пользователя.\n
+12. /инвайт <ссылка> - Автоматически добавляет бота в беседу\n
+13. /озвучить <text> - Озвучивает ваш текст\n\n
 ЭТОТ БОТ РАБОТАЕТ ТОЛЬКО В ЧАТАХ\n\n""")
     await asyncio.sleep(1)
     await user.api.messages.edit(
@@ -1050,6 +1078,7 @@ async def audio(message: Message, text):
         f'sample.mp3', file_source=f'sample.mp3', peer_id=message.peer_id
     )
     await message.reply(attachment=audio_upd)
+
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
 user.run_forever()
