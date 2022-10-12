@@ -11,7 +11,6 @@ import asyncio
 from config import *
 import time
 import json
-from gtts import gTTS
 import os
 import torch
 x = str(datetime.datetime.now()).partition('.')[0].replace(' ', ' в ')
@@ -72,7 +71,7 @@ async def captcha_handler(e: CaptchaError) -> str:
 
     return solved["solve"]
 
-@user.on.chat_message(text=['/сколько у <name> <what>?'])
+@user.on.chat_message(text=['/сколько у <name> <what>?'.lower()])
 async def main(message: Message, name, what):
     user_id = message.from_id
     await reg(user_id)
@@ -144,7 +143,7 @@ async def main(message: Message, name, what):
     except 'final':
         await message.reply('Диапазон должен быть указан числом')
 
-@user.on.chat_message(text=['/хуй'])
+@user.on.chat_message(text=['/хуй'.lower()])
 async def wrappe(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -165,7 +164,7 @@ async def wrappe(message: Message):
         message_ids=msg_id_l.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text=['/хуй-'])
+@user.on.chat_message(text=['/хуй-'.lower()])
 async def wrappe(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -186,7 +185,7 @@ async def wrappe(message: Message):
         message_ids=msg_id_l.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text=['/спам <text1> <num>'])
+@user.on.chat_message(text=['/спам <text1> <num>'.lower()])
 async def spam(message: Message, text1, num):
     user_id = message.from_id
     await reg(user_id)
@@ -207,7 +206,7 @@ async def spam(message: Message, text1, num):
             delete_for_all=1)
         await message.reply('Выполнено и удалено')
 
-@user.on.chat_message(text=['/ban <coutry>'])
+@user.on.chat_message(text=['/ban <coutry>'.lower()])
 async def spam(message: Message, coutry):
     user_id = message.from_id
     await reg(user_id)
@@ -251,7 +250,7 @@ async def spam(message: Message, coutry):
             message_ids=msg_id5.message_id,
             delete_for_all=1)
 
-@user.on.chat_message(text='/статус <stat>')
+@user.on.chat_message(text='/статус <stat>'.lower())
 async def spam(message: Message, stat):
     user_id = message.from_id
     await reg(user_id)
@@ -271,7 +270,7 @@ async def spam(message: Message, stat):
     else:
         await message.reply('У меня нет доступа к твоему аккаунту. Кидай свой токен в лс быстро')
 
-@user.on.chat_message(text=['/бал'])
+@user.on.chat_message(text=['/бал'.lower()])
 async def vkc(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -283,7 +282,7 @@ async def vkc(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text=['/бал @<name>', '/бал [<name>|<rfc>]'])
+@user.on.chat_message(text=['/бал @<name>'.lower(), '/бал [<name>|<rfc>]'.lower()])
 async def vkc(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -303,7 +302,7 @@ async def vkc(message: Message, name):
 async def wrapper(message: Message):
         user_id = message.from_id
         await reg(user_id)
-        if message.text != "" and message.text.find('/дем') == 0:
+        if message.text != "" and message.text.find('/дем'.lower()) == 0:
             text = message.text.splitlines()
             photo = message.attachments[0].photo.sizes[-1].url
             p = requests.get(photo)
@@ -323,7 +322,7 @@ async def wrapper(message: Message):
         else:
             await asyncio.sleep(0.00000001)
 
-@user.on.chat_message(text='/дем<text>')
+@user.on.chat_message(text='/дем<text>'.lower())
 async def wrapper(message: Message):
     if message.reply_message is not None:
         user_id = message.from_id
@@ -375,7 +374,7 @@ async def wrapper(message: Message):
     else:
         msg_id = await message.reply('Чтобы создать демотиватор надо отметить сообщение')
 
-@user.on.chat_message(text='/ауф')
+@user.on.chat_message(text='/ауф'.lower())
 async def wrapper(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -388,7 +387,7 @@ async def wrapper(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/интересный факт')
+@user.on.chat_message(text='/интересный факт'.lower())
 async def wrapper(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -402,7 +401,7 @@ async def wrapper(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.message(text='/команды')
+@user.on.message(text='/команды'.lower())
 async def wrapper(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -609,7 +608,7 @@ P.S. Бот уже стоит на хосте, но с 28 ноября хост 
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/цитата нью')
+@user.on.chat_message(text='/цитата нью'.lower())
 async def quote(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -662,7 +661,7 @@ async def quote(message: Message):
             message_ids=msg_id.message_id,
             delete_for_all=1)
 
-@user.on.chat_message(text='/цитата')
+@user.on.chat_message(text='/цитата'.lower())
 async def quote(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -720,7 +719,7 @@ async def quote(message: Message):
             message_ids=msg_id.message_id,
             delete_for_all=1)
 
-@user.on.chat_message(text='/чекхуй топ')
+@user.on.chat_message(text='/чекхуй топ'.lower())
 async def dicktop(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -742,7 +741,7 @@ async def dicktop(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/чекхуй')
+@user.on.chat_message(text='/чекхуй'.lower())
 async def dickinfo(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -757,7 +756,7 @@ async def dickinfo(message: Message):
     msg_id = await message.reply(attachment=photo_upd)
     os.remove('qresult.png')
 
-@user.on.chat_message(text=['/чекхуй @<name>', '/чекхуй [<name>|<rfc>'])
+@user.on.chat_message(text=['/чекхуй @<name>'.lower(), '/чекхуй [<name>|<rfc>'.lower()])
 async def dickinfo(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -772,7 +771,7 @@ async def dickinfo(message: Message, name):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/сп <name>')
+@user.on.chat_message(text='/сп <name>'.lower())
 async def spam(message: Message, name):
     a = 0
     db_object.execute(f"SELECT admin FROM users WHERE id = {message.from_id}")
@@ -785,7 +784,7 @@ async def spam(message: Message, name):
     else:
         await asyncio.sleep(0.000001)
 
-@user.on.chat_message(text=['/бан @<name>', '/бан [<name>|<rfc>]'])
+@user.on.chat_message(text=['/бан @<name>'.lower(), '/бан [<name>|<rfc>]'.lower()])
 async def ban(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -814,7 +813,7 @@ async def ban(message: Message, name):
     else:
         await asyncio.sleep(0.0001)
 
-@user.on.chat_message(text=['/разбан @<name>', '/разбан [<name>|<rfc>]'], )
+@user.on.chat_message(text=['/разбан @<name>'.lower(), '/разбан [<name>|<rfc>]'.lower()], )
 async def ban(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -845,7 +844,7 @@ async def ban(message: Message, name):
     else:
         await asyncio.sleep(0.0001)
 
-@user.on.chat_message(text=['/адм команды'])
+@user.on.chat_message(text=['/адм команды'.lower()])
 async def command(message: Message):
     msg_id = await message.answer("""Команды администрации:\n\n
 1. /спам <text> <num> - Невидимо спамит <text>'ом <num> раз\n
@@ -859,12 +858,12 @@ async def command(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text=['/айди @<name>', '/айди [<name>|<rfc>]'])
+@user.on.chat_message(text=['/айди @<name>'.lower(), '/айди [<name>|<rfc>]'.lower()])
 async def abt(message: Message, name):
     user_id = await user.api.utils.resolve_screen_name(name)
     await message.answer(f'Айди: {user_id.object_id}')
 
-@user.on.chat_message(text='/пинг')
+@user.on.chat_message(text='/пинг'.lower())
 async def ping(message: Message):
     start_time = time.time()
     msg_id = await message.answer('Пингую...')
@@ -879,7 +878,7 @@ async def ping(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/мем')
+@user.on.chat_message(text='/мем'.lower())
 async def meme(message: Message):
     user_id = message.from_id
     await reg(user_id)
@@ -903,7 +902,7 @@ async def meme(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text=['/админ @<name>', '/админ [<name>|<rfc>'])
+@user.on.chat_message(text=['/админ @<name>'.lower(), '/админ [<name>|<rfc>'.lower()])
 async def adminn(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -923,7 +922,7 @@ async def adminn(message: Message, name):
             else:
                 await message.answer('Не удалось выдать администратора')
 
-@user.on.chat_message(text=['/админ снять @<name>', '/админ снять [<name>|<rfc>'])
+@user.on.chat_message(text=['/админ снять @<name>'.lower(), '/админ снять [<name>|<rfc>'.lower()])
 async def adminn(message: Message, name):
     user_id = message.from_id
     await reg(user_id)
@@ -943,7 +942,7 @@ async def adminn(message: Message, name):
             else:
                 await message.answer('Не удалось выдать роль участника')
 
-@user.on.chat_message(text='/статистика')
+@user.on.chat_message(text='/статистика'.lower())
 async def stats(message: Message):
     db_object.execute(f'SELECT users_count FROM users WHERE id = 1')
     result = db_object.fetchone()[0]
@@ -951,7 +950,7 @@ async def stats(message: Message):
     result2 = db_object.fetchone()[0]
     await message.answer(f'Надйено команд: {result}\nОбработано команд: {result2}\nНе обработано: {result-result2}')
 
-@user.on.chat_message(text=['/стики @<text>', '/стики [<text>|<rfc>'])
+@user.on.chat_message(text=['/стики @<text>'.lower(), '/стики [<text>|<rfc>'.lower()])
 async def stick(message: Message, text):
         user_id1 = await user.api.utils.resolve_screen_name(text)
         user_id = user_id1.object_id
@@ -1001,7 +1000,7 @@ async def stick(message: Message, text):
             await message.reply(
                 f"✅ [id{user_id}|{name[0].first_name} {name[0].last_name}] имеет {config.pluralForm(a, ['стикерпак', 'стикерпака', 'стикерпаков'])} из них {paid_count} стикерпаков платные и {b} стилей:\n\n🤕Бесплатные стикеры: {reply_message1}и т.д. \n\n🤑Платные стикеры: {reply_message2}и т.д. \n\n😻Приблизительная цена: {price}₽")
 
-@user.on.private_message(text='/инвайт <text>')
+@user.on.private_message(text='/инвайт <text>'.lower())
 async def invite(message: Message, text):
     print(text)
     try:
@@ -1010,7 +1009,7 @@ async def invite(message: Message, text):
     except:
         await message.reply('Нету доступа к чату')
 
-@user.on.chat_message(text='/стики')
+@user.on.chat_message(text='/стики'.lower())
 async def stickerr(message: Message):
     user_id = message.from_id
     name = await user.api.users.get(user_id)
@@ -1065,7 +1064,7 @@ async def stickerr(message: Message):
         message_ids=msg_id.message_id,
         delete_for_all=1)
 
-@user.on.chat_message(text='/озвучить <text>')
+@user.on.chat_message(text='/озвучить <text>'.lower())
 async def audio(message: Message, text):
     example_text = f'{text}'
     sample_rate = 48000
