@@ -1077,7 +1077,7 @@ async def audio(message: Message, text):
         f'test.wav', file_source=f'test.wav', peer_id=message.peer_id
     )
     await message.reply(attachment=audio_upd)
-    os.remove('test.wav')
+    os.remove('test.wavpip freeze')
 
 user.labeler.message_view.register_middleware(banan)
 user.api.add_captcha_handler(captcha_handler)
